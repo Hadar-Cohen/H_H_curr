@@ -47,26 +47,33 @@
         });
  ////////////////////////////////////top rated from the movie DB api - //////////////////////////////////////////////
         function getTopRated() {
-            topRatedArr = "<div class='container'>";
-            topRatedArr += "<div class='row'>";
-            $("#topRated").html(topRatedArr);
+            topRatedList = "<div class='container'>";
+            topRatedList += "<div class='row'>";
 
             let apiCall = url + "3/trending/tv/week?" + api_key;
             ajaxCall("GET", apiCall, "", getSuccesstopRated, errortopRated);
         }
 
         r = 0; //index in result array that contain all the tv shows in the TMDB services
-        resultArr = null;//local arrey to render and play onclick function 
+        topRatedArr = [];//local arrey to render and play onclick function 
         function getSuccesstopRated(topRated) {
-            console.log(topRated);
-            resultArr = topRated.results;
-            topRatedArr += "<div class='recommand-card'>";
-            topRatedArr += "<img src='" + imagePath + topRated.results[r].poster_path + "'>";
-            topRatedArr += "<h4><b>" + topRated.results[r].name + "</b></h4>";
-
+            topRatedArr = topRated.results;
+            topRatedArr.forEach(TVShow => {
+                topRatedList += drawtopRated(TVShow);
+                r++;
+            });
+            topRatedList += "</div></div>";
+            $("#topRated").html(topRatedList);
+            r = 0;
+      
+        }
+        function errortopRated(err) {
+            console.log(err);
+        }
+        function drawtopRated(TVShow) {
+            console.log(TVShow);
             let stars = 5;
-            let popularity = resultArr[r].popularity;
-            ///////////////////////Star rating according to the series api//////////////////////
+            let popularity = TVShow.popularity;
             switch (true) {
                 case (popularity < 40):
                     stars = 1
@@ -81,42 +88,51 @@
                     stars = 4
                     break;
             }
-
-            topRatedArr += "<img class='starsPopularity' src= '../images/" + stars + "stars.png'/></div>";
-            $("#topRated").html(topRatedArr);
-            r++;
-            let apiCall = url + "3/trending/tv/week?" + api_key;
-            ajaxCall("GET", apiCall, "", getSuccesstopRated, errortopRated);
-        }
-        function errortopRated(err) {
-            console.log(err);
-            topRatedArr += "</div></div>";//close the div
-            $("#topRated").html(topRatedArr);
-            r = 0;
-            resultArr = null;
+            str = "";
+            str = `<div class='recommand-card' onclick = 'showAbout(topRatedArr[` + r + `])'>
+                   <img src='` + imagePath + TVShow.poster_path + `'>
+                   <h4><b>` + TVShow.name + `</b></h4>
+                   <img class='starsPopularity' src= '../images/` + stars + `stars.png'/></div>`
+            return str;
         }
 
 ///////////////////////////////////////most view according awere DB ///////////////////////////////////////////////////
         function getMostViewed() {
-            mostViewedArr = "<div class='container'>";
-            mostViewedArr += "<div class='row'>";
-            $("#mostViewed").html(mostViewedArr);
+            //mostViewedArr = "<div class='container'>";
+            //mostViewedArr += "<div class='row'>";
+            //$("#mostViewed").html(mostViewedArr);
+            mostViewedList = "<div class='container'>";
+            mostViewedList += "<div class='row'>"; 
+
             let api = "../api/Seriess";
             ajaxCall("GET", api, "", getSuccessMostViewed, errorMostViewed);
         }
 
-        s = 0; //index in result array that contain all the tv shows in the TMDB services
-       // resultArr = null;//local arrey to render and play onclick function 
+        r = 0; //index in result array that contain all the tv shows in the TMDB services
+        mostViewedArr = [];//local arrey to render and play onclick function 
+
         function getSuccessMostViewed(topV) {
             console.log(topV);
-           /* resultArr = topV.results;*/
-            mostViewedArr += "<div class='recommand-card'>";
-            mostViewedArr += "<img src='" + topV[s].Poster_path + "'>";
-            mostViewedArr += "<h4><b>" + topV[s].Name + "</b></h4>";
+            mostViewedArr = topV;
+            mostViewedArr.forEach(TVShow => {
+                mostViewedList += drawMostViewed(TVShow);
+                r++;
+                if (r > 7)
+                    errorMostViewed("we render 20 first seriess");
+            });
+            mostViewedList += "</div></div>";
+            $("#mostViewed").html(mostViewedList);
+            r = 0;
+        }
 
+        function errorMostViewed(err) {
+            console.log(err);
+        }
+
+        function drawMostViewed(TVShow) {
+            console.log(TVShow);
             let stars = 5;
-            let popularity = topV.popularity;
-            ///////////////////////Star rating according to the series api//////////////////////
+            let popularity = TVShow.popularity;
             switch (true) {
                 case (popularity < 40):
                     stars = 1
@@ -131,22 +147,12 @@
                     stars = 4
                     break;
             }
-
-            mostViewedArr += "<img class='starsPopularity' src= '../images/" + stars + "stars.png'/></div>";
-            $("#mostViewed").html(mostViewedArr);
-            s++;
-            if (s < 8) {
-                let api = "../api/Seriess";
-                ajaxCall("GET", api, "", getSuccessMostViewed, errorMostViewed);
-            }
-            else
-                errorMostViewed("we render 20 first seriess"); 
-        }
-        function errorMostViewed(err) {
-            console.log(err);
-            mostViewedArr += "</div></div>";//close the div
-            $("#mostViewed").html(mostViewedArr);
-            s = 0;
+            str = "";
+            str = `<div class='recommand-card' onclick = 'showAbout(mostViewedArr[` + r + `])'>
+                   <img src='`+TVShow.Poster_path + `'>
+                   <h4><b>` + TVShow.Name + `</b></h4>
+                   <img class='starsPopularity' src= '../images/` + stars + `stars.png'/></div>`
+            return str;
         }
 
     </script>
