@@ -143,7 +143,7 @@ namespace Ex2.Models.DAL
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
                 String selectSTR = "Select distinct S.name From Preferences_2021 as P inner join User_2021 as U on U.id=P.userId ";
-                selectSTR += "inner join Series_2021 as S on P.seriesId= S.id WHERE U.id = " + userId.ToString();
+                selectSTR += "inner join Series_2021 as S on P.seriesId= S.id WHERE U.id = " + userId;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
                 
 

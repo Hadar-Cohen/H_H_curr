@@ -11,10 +11,10 @@ namespace Ex2.Controllers
     public class EpisodesController : ApiController
     {
         // GET api/<controller>/5
-        public IEnumerable<Episode> Get(string seriesName)
+        public List<Episode> Get(string seriesName, int userId)
         {
             Episode e = new Episode();
-            List<Episode> Elist = e.Get(seriesName);
+            List<Episode> Elist = e.Get(seriesName, userId);
             return Elist;
         }
 

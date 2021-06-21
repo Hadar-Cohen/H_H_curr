@@ -43,7 +43,6 @@
     <script src="../Scripts/config.js"></script>
     <!-- Links For Chat -->
 
-
     <script src="../Scripts/aboutTv.js"></script>
 
 
@@ -75,12 +74,12 @@
     </div>
     <!-- //////////////////////////////////////////// Tabs ////////////////////////////////////////////////// -->
     <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'Actors')">Actors</button>
-        <button class="tablinks" onclick="openTab(event, 'Recommendations')">Recommendations</button>
-        <button class="tablinks" onclick="openTab(event, 'Similar')">Similar</button>
-        <button class="tablinks" onclick="openTab(event, 'Reviews'); window.dispatchEvent(new Event('resize'));">Reviews</button>
-        <button class="tablinks" onclick="openTab(event, 'Chat'); setTimeout(scrollChatDown, 1);">Chat</button>
-        <button class="tablinks" onclick="location.href = 'insert_signup.html'">Seasons and Episodes</button>
+        <button class="tablinks" tabindex="1" onclick="openTab(event, 'Actors')">Actors</button>
+        <button class="tablinks" tabindex="2" onclick="openTab(event, 'Recommendations')">Recommendations</button>
+        <button class="tablinks" tabindex="3" onclick="openTab(event, 'Similar')">Similar</button>
+        <button class="tablinks" tabindex="4" onclick="openTab(event, 'Reviews'); window.dispatchEvent(new Event('resize'));">Reviews</button>
+        <button class="tablinks" tabindex="5" onclick="openTab(event, 'Chat'); setTimeout(scrollChatDown, 1);">Chat</button>
+        <button class="tablinks" tabindex="6" onclick="location.href = 'insert_signup.html'">Seasons and Episodes</button>
     </div>
 
     <div id="Actors" class="tabcontent">
@@ -124,7 +123,13 @@
                             <div class="chatCard-header">
                                 <h4 class="chatCard-title"><strong>Chat</strong></h4>
                             </div>
-                            <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important; display: flex; flex-direction: column; justify-content: flex-end">
+                            <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important; display: flex; flex-direction: column-reverse;">
+                                <div class="publisher bt-1 border-light">
+                                    <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+                                    <input id="msgTB" class="publisher-input" type="text" placeholder="Write something"><span class="publisher-btn file-group">
+                                        <button onclick="addMSG()">Add Message</button>
+                                    </span>
+                                </div>
                                 <div id="chat"></div>
 
                                 <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
@@ -132,12 +137,6 @@
                                 </div>
                                 <div id="gotcha" class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
                                     <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
-                                </div>
-                                <div class="publisher bt-1 border-light">
-                                    <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
-                                    <input id="msgTB" class="publisher-input" type="text" placeholder="Write something"><span class="publisher-btn file-group">
-                                        <button onclick="addMSG()">Add Message</button>
-                                    </span>
                                 </div>
                             </div>
                         </div>

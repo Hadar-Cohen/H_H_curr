@@ -13,44 +13,48 @@ function getSeriesErrorCB(err) {
 }
 
 function showEpisodes(series) {
+    initChat();
     var selectedText = series.options[series.selectedIndex].innerHTML;
-    episodesList = "<tr>";
-    console.log(selectedText);
-    let api = "../api/Episodes?SeriesName=" + selectedText;
+    let api = "../api/Totals?seriesName=" + selectedText + "&userId=" + userId;
     ajaxCall("GET", api, "", getEpisodesSuccessCB, Error);
 }
+
 function getEpisodesSuccessCB(episodes) {
     console.log(episodes);
-     i = 0;
-    while (i < episodes.length) {
-        ep = episodes[i];
-        episodesList += "<td class='card2' style='width:800px height: 700px'><a class='deleteEpisodeBtn' onclick=deleteEpisode(ep) tabindex='0' role='button'>X</a> <center><b><p id='episodeTitle'>" + episodes[i].SeriesName + " season " + episodes[i].SeasonNum + "</p></b></center><img class= 'imgCard' src='" + episodes[i].ImageURL + "'>";
-        episodesList += "<div id='episodeBlock'><br><b>" + episodes[i].EpisodeName + "</b></br > " + episodes[i].AirDate + "</br></br><div id='episodeOverView'>" + episodes[i].Overview + "</div></div></td>";
+    episodesList = "";
 
-        if ((i + 1) % 4 == 0)
-            episodesList += "</tr>";
-        i++;
-        if ((i + 1) % 4 == 1)
-            episodesList += "<tr>";
-    }
-    episodesList += "</tr>";
+    episodes.forEach(ep => {
+        episodesList += drawEpisodeCard(ep);
+    });
     $("#episodesView").html(episodesList);
 }
+
+i = 0;
+episodes = [];
+function drawEpisodeCard(episode) {
+    episodes[i] = episode;
+    let str = "<div class='card2' style='width:800px; height: 400px'><a class='deleteEpisodeBtn' onclick=deleteEpisode(episodes["+i+"]) tabindex='0' role='button'>X</a> <center><b><p class='episodeTitle'>" + episode.SeriesName + " season " + episode.SeasonNum + "</p></b></center><img class= 'imgCard' src='" + episode.ImageURL + "'>";
+    str += "<div class='episodeBlock'><br><b>" + episode.EpisodeName + "</b></br > " + episode.AirDate + "</br></br><div id='episodeOverView'>" + episode.Overview + "</div></div></div>";
+    i++;
+    return str;
+}
+
 function Error(err) {
     console.log(err);
 }
 
 function exitFunc() {
     localStorage.clear();
-    document.location = 'insert_signup.html';
+    document.location = 'homePage.html';
 }
 
 function deleteEpisode(episode) {
-    let api = "../api/Totals?episodeId=" + episode.EpisodeId + "&seriesId=" + episode.SeriesId + "&userId=" + user.Id;
+    let api = "../api/Totals?episodeId=" + episode.EpisodeId + "&seriesId=" + episode.SeriesId + "&userId=" + userId;
     ajaxCall("DELETE", api, "", deleteEpisodesSuccess, Error);
 }
 
 function deleteEpisodesSuccess()
 {
+    location.reload();
     alert('deleted');
 }

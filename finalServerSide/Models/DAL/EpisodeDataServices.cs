@@ -92,7 +92,7 @@ namespace Ex2.Models.DAL
         //---------------------------------------------------------------------------------
         // Read from the DB into a list - dataReader
         //---------------------------------------------------------------------------------
-        public List<Episode> GetEpisodes(string seriesName)
+        public List<Episode> GetEpisodes(string seriesName, int userId)
         {
             SqlConnection con = null;
             List<Episode> episodeList = new List<Episode>();
@@ -102,8 +102,8 @@ namespace Ex2.Models.DAL
             {
                 con = connect("DBConnectionString"); // create a connection to the database using the connection String defined in the web config file
 
-                String selectSTR = "SELECT E.* From Preferences_2021 as P inner join User_2021 as U  on U.id=P.userId inner join Episode_2021 as E on E.episodeId=P.episodeId ";
-                selectSTR += "Where E.seriesName= '" + seriesNameTmp + "'";
+                String selectSTR = "SELECT E.* From Preferences_2021 as P inner join Episode_2021 as E on E.episodeId=P.episodeId ";
+                selectSTR += "Where E.seriesName= '" + seriesNameTmp + "' and P.userId= " + userId;
                 SqlCommand cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader

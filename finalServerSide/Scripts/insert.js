@@ -61,7 +61,7 @@ function getTVSuccessCB(tv) {
     buildTvSeriese(tv);
     console.log(tv);
     $("#Episodes").html("");
-    seasonsList = "<span>";
+    seasonsList = "";
     tvId = tv.results[0].id;
     posterURL = tv.results[0].poster_path
     let poster = imagePath + posterURL;
@@ -147,7 +147,6 @@ function getSeasonSuccessCB(season) {
 
 function getSeasonErrorCB(err) {
     if (err.status == 404) {
-        seasonsList += "</span>";
         $("#seasonsList").html(seasonsList);
         console.log(err);
     }
@@ -155,7 +154,6 @@ function getSeasonErrorCB(err) {
 
 function showEpisode(seasonNum) {
     j = 1;
-    
     saveSeasonNum = seasonNum;
     episodesList = "";
     $("#Episodes").html(episodesList);
@@ -186,7 +184,7 @@ function getEpisodeSuccessCB(episodes) {
 
     epArr.push(episode);    //מערך של כל הפרקים
     episodesList += "<div class='card2'><img class= 'imgCard' id='" + j + "' src='" + episode.ImageURL + "'>"; //td changed to div
-    episodesList += "<div id='episodeBlock'><br><b id='episodeTitle'>" + (episodes.name).slice(0, 17);
+    episodesList += "<div class='episodeBlock'><br><b class='episodeTitle'>" + (episodes.name).slice(0, 17);
     episodesList += "</b></br> " + episodes.air_date + "</br></br><div id='episodeOverView'>" + episodes.overview + "</div></div>";
     if (localStorage.user != undefined) {
         episodesList += "</br><button class='addBtn' id='" + c + "' type='button' onclick=PostToServer(epArr[this.id])> Add </button> </center>";

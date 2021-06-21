@@ -326,6 +326,7 @@
     <Content Include="Pages\insert_signup.html" />
     <Content Include="Pages\login.html" />
     <Content Include="Pages\login_style_sheet.css" />
+    <Content Include="Pages\modalView.css" />
     <Content Include="Pages\myStyle.css" />
     <Content Include="Pages\StyleSheetModalactor.css" />
     <Content Include="Pages\view.html" />
@@ -500,7 +501,7 @@
     <Content Include="packages\WebGrease.1.6.0\WebGrease.1.6.0.nupkg" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\config.js" />
-    <Content Include="Scripts\insertHome.js" />
+    <Content Include="Scripts\insert.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -512,6 +513,7 @@
     <Content Include="Scripts\view.js" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\viewChat.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
