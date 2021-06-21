@@ -43,6 +43,7 @@
 
             getTopRated();  // Get similars Tv show
             getMostViewed(); 
+            getMostViewedEpisodes();
          
         });
  ////////////////////////////////////top rated from the movie DB api - //////////////////////////////////////////////
@@ -97,6 +98,8 @@
         }
 
 ///////////////////////////////////////most view according awere DB ///////////////////////////////////////////////////
+////////////////////////////////////// Seriess ///////////////////////////////////////////////////
+
         function getMostViewed() {
             //mostViewedArr = "<div class='container'>";
             //mostViewedArr += "<div class='row'>";
@@ -107,7 +110,7 @@
             let api = "../api/Seriess";
             ajaxCall("GET", api, "", getSuccessMostViewed, errorMostViewed);
         }
-
+       
         r = 0; //index in result array that contain all the tv shows in the TMDB services
         mostViewedArr = [];//local arrey to render and play onclick function 
 
@@ -149,8 +152,67 @@
             }
             str = "";
             str = `<div class='recommand-card' onclick = 'showAbout(mostViewedArr[` + r + `])'>
-                   <img src='`+TVShow.Poster_path + `'>
+                   <img src='`+ TVShow.Poster_path + `'>
                    <h4><b>` + TVShow.Name + `</b></h4>
+                   <img class='starsPopularity' src= '../images/` + stars + `stars.png'/></div>`
+            return str;
+        }
+
+    ////////////////////////////////////// Episodes ///////////////////////////////////////////////////
+        function getMostViewedEpisodes() {
+            //mostViewedArr = "<div class='container'>";
+            //mostViewedArr += "<div class='row'>";
+            //$("#mostViewed").html(mostViewedArr);
+            mostViewedEpisodesList = "<div class='container'>";
+            mostViewedEpisodesList += "<div class='row'>";
+
+            let api = "../api/Episodes";
+            ajaxCall("GET", api, "", getSuccessMostViewedEpisodes, errorMostViewedEpisodes);
+        }
+        r = 0; //index in result array that contain all the tv shows in the TMDB services
+        mostViewedEpisodesArr = [];//local arrey to render and play onclick function 
+
+        function getSuccessMostViewedEpisodes(topV) {
+            console.log(topV);
+            mostViewedEpisodesArr = topV;
+            mostViewedEpisodesArr.forEach(TVShow => {
+                mostViewedEpisodesList += drawMostViewedEpisodes(TVShow);
+                r++;
+                if (r > 7)
+                    errorMostViewed("we render 20 first seriess");
+            });
+            mostViewedEpisodesList += "</div></div>";
+            $("#mostViewedEpisodes").html(mostViewedEpisodesList);
+            r = 0;
+        }
+
+        function errorMostViewedEpisodes(err) {
+            console.log(err);
+        }
+
+        function drawMostViewedEpisodes(TVShow) {
+            console.log(TVShow);
+            let stars = 5;
+            let popularity = TVShow.popularity;
+            switch (true) {
+                case (popularity < 40):
+                    stars = 1
+                    break;
+                case (popularity < 60):
+                    stars = 2
+                    break;
+                case (popularity < 200):
+                    stars = 3
+                    break;
+                case (popularity < 400):
+                    stars = 4
+                    break;
+            }
+            str = "";
+            str = `<div class='recommand-card' onclick = 'showAbout(mostViewedEpisodesArr[` + r + `])'>
+                   <img src='`+ TVShow.ImageURL + `'>
+                   <h5><b>` + TVShow.SeriesName + "</b><br>Season" + TVShow.SeasonNum + `</h5>
+                   <h5>` + TVShow.EpisodeName + `</h5>
                    <img class='starsPopularity' src= '../images/` + stars + `stars.png'/></div>`
             return str;
         }
@@ -181,11 +243,13 @@
     </nav>
 
     <span id="webName">H & H </span>
-    <div class='title'><a href="insert_signup.html" >Search...</a></div>
+    <div><a href="insert_signup.html"><img id="toSerchImg" src="../images/search.jpeg" /></a></div>
     <div class='title'><a>TOP RATED</a></div>
     <div id="topRated"></div>
     <div class='title'><a>Most viewed on our website</a></div>
     <div id="mostViewed"></div>
-
+    <div class='title'><a>The most watched episodes on our website</a></div>
+    <div id="mostViewedEpisodes"></div>
+    
 </body>
 </html>
