@@ -18,7 +18,7 @@ namespace Ex2.Models
         int yearOfBirth;
         string genre;
         string address;
-
+        
         public string FirstName { get => firstName; set => firstName = value; }
         public string LastName { get => lastName; set => lastName = value; }
         public string Email { get => email; set => email = value; }
@@ -71,7 +71,17 @@ namespace Ex2.Models
             return db.Delete(id);
         }
 
+        public User GetById(int id)
+        {
+            UserDataServices us = new UserDataServices();
+            return us.GetById(id);
+        }
 
+        public int UpdateUser()
+        {
+            UserDataServices us = new UserDataServices();
+            return us.UpdateUser(this); //return 1/-1;
+        }
 
     }
 }

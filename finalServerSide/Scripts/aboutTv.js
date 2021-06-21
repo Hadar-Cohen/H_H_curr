@@ -151,57 +151,7 @@ function openModal() {
 // When the user clicks anywhere outside of the modal, close it
 function getActorErrorCB(actor) {
     console.log(actor);
-
 }
-//Reocommanded Series
-//function getRecommendations() {
-//    recList = "<div class='container'>";
-//    recList += "<div class='row'>";
-//    $("#recommendations").html(recList);
-
-//    let apiCall = url + method + tvId + "/recommendations?" + api_key;
-//    ajaxCall("GET", apiCall, "", getSuccessRecommendationsCB, errorRecommendationsCB);
-//}
-
-////Get all the tv shows recommand to the user, according to his choises
-//r = 0; //index in result array that contain all the tv shows in the TMDB services
-//resultArr = null;
-//function getSuccessRecommendationsCB(recommendations) {
-//    resultArr = recommendations.results;
-//    recList += "<div class='recommand-card' onclick = 'showAbout(resultArr[" + r + "])'>";
-//    recList += "<img src='" + imagePath + recommendations.results[r].poster_path + "'>";
-//    recList += "<h4><b>" + recommendations.results[r].name + "</b></h4>";
-//    recList += "<h4>" + recommendations.results[r].origin_country[0] + ", " + recommendations.results[r].original_language + "</h4>";
-
-//    let stars = 5;
-//    let popularity = recommendations.results[r].popularity;
-//    switch (true) {
-//        case (popularity < 40):
-//            stars = 1
-//            break;
-//        case (popularity < 60):
-//            stars = 2
-//            break;
-//        case (popularity < 200):
-//            stars = 3
-//            break;
-//        case (popularity < 400):
-//            stars = 4
-//            break;
-//    }
-
-//    recList += "<img class='starsPopularity' src= '../images/" + stars + "stars.png'/></div>";
-//    $("#recommendations").html(recList);
-//    r++;
-//    let apiCall = url + method + tvId + "/recommendations?" + api_key;
-//    ajaxCall("GET", apiCall, "", getSuccessRecommendationsCB, errorRecommendationsCB);
-//}
-//function errorRecommendationsCB(err) {
-//    alert("ERROR");
-//    recList += "</div></div>";
-//    $("#recommendations").html(recList);
-//    r = 0;
-//}
 
 //Reocommanded Series
 function getRecommendations() {
@@ -225,7 +175,7 @@ function getSuccessRecommendationsCB(recommendations) {
     });
     recList += "</div></div>";
     $("#recommendations").html(recList);
-    //לאפס את r
+    r = 0;
     
 }
 function errorRecommendationsCB(err) {
@@ -262,7 +212,7 @@ function drawRecommand(rec) {
 function getSimilars() {
     similarList = "<div class='container'>";
     similarList += "<div class='row'>";
-    $("#similars").html(similarList);
+    //$("#similars").html(similarList);
 
     let apiCall = url + method + tvId + "/similar?" + api_key;
     ajaxCall("GET", apiCall, "", getSuccessSimilarsCB, errorSimilarsCB);
@@ -273,39 +223,42 @@ similarArr = null;
 function getSuccessSimilarsCB(similars) {
     console.log(similars);
     similarArr = similars.results;
-    similarList += "<div class='recommand-card' onclick = 'showAbout(similarArr[" + r + "])'>";
-    similarList += "<img src='" + imagePath + similarArr[r].poster_path + "'>";
-    similarList += "<h4><b>" + similarArr[r].name + "</b></h4>";
-    similarList += "<h4>" + similarArr[r].origin_country[0] + ", " + similarArr[r].original_language + "</h4>";
 
-    let stars = 5;
-    let popularity = similarArr[r].popularity;
-    switch (true) {
-        case (popularity < 40):
-            stars = 1
-            break;
-        case (popularity < 60):
-            stars = 2
-            break;
-        case (popularity < 200):
-            stars = 3
-            break;
-        case (popularity < 400):
-            stars = 4
-            break;
-    }
-
-    similarList += "<img class='starsPopularity' src= '../images/" + stars + "stars.png'/></div>";
+    similarArr.forEach(similarShow => {
+        similarList += drawRecommand(similarShow);
+        r++;
+    });
+    similarList += "</div></div>";
     $("#similars").html(similarList);
-    r++;
-    let apiCall = url + method + tvId + "/similar?" + api_key;
-    ajaxCall("GET", apiCall, "", getSuccessSimilarsCB, errorSimilarsCB);
+
+    //let stars = 5;
+    //let popularity = similarArr[r].popularity;
+    //switch (true) {
+    //    case (popularity < 40):
+    //        stars = 1
+    //        break;
+    //    case (popularity < 60):
+    //        stars = 2
+    //        break;
+    //    case (popularity < 200):
+    //        stars = 3
+    //        break;
+    //    case (popularity < 400):
+    //        stars = 4
+    //        break;
+    //}
+
+    //similarList += "<img class='starsPopularity' src= '../images/" + stars + "stars.png'/></div>";
+    //$("#similars").html(similarList);
+    //r++;
+    //let apiCall = url + method + tvId + "/similar?" + api_key;
+    //ajaxCall("GET", apiCall, "", getSuccessSimilarsCB, errorSimilarsCB);
+
 }
 function errorSimilarsCB(err) {
     alert("ERROR");
-    similarList += "</div></div>";
-    $("#similars").html(similarList);
-    r = 0;
+    //similarList += "</div></div>";
+    //$("#similars").html(similarList);
 }
 
 //Show the about page of this tvshow was clicked

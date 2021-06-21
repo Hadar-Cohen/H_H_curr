@@ -160,7 +160,55 @@ namespace Ex2.Models.DAL
                 }
             }
         }
-       
+
+        public User GetById(int id)
+        {
+            SqlConnection con = null;
+            SqlCommand cmd;
+           
+            try
+            {
+                con = connect("DBConnectionString"); // create the connection
+                //checking if the email already exists
+                String selectSTR = "SELECT * FROM User_2021 WHERE id = "+ id ;
+                cmd = new SqlCommand(selectSTR, con);
+
+                // get a reader
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                User u = new User();
+                if (dr.Read())
+                {
+                    //u = new User();
+                    u.Id = Convert.ToInt32(dr["id"]);
+                    u.FirstName = (string)dr["firstName"];
+                    u.LastName = (string)dr["lastName"];
+                    u.Email = (string)dr["email"];
+                    u.Password = (string)dr["password"];
+                    u.PhoneNum = (string)dr["phoneNum"];
+                    u.Gender = (string)dr["gender"];
+                    u.YearOfBirth = Convert.ToInt32(dr["yearOfBirth"]);
+                    u.Genre = (string)dr["genre"];
+                    u.Address = (string)dr["address"];
+                }
+                return u;
+            }
+            
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
         public List<User> GetUsers()
         {
             SqlConnection con = null;
@@ -208,6 +256,58 @@ namespace Ex2.Models.DAL
             }
         }
 
+        public int UpdateUser(User user)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            {
+                try
+                {
+                    con = connect("DBConnectionString"); // create the connection
+                }
+                catch (Exception ex)
+                {
+                    // write to log
+                    throw (ex);
+                }
+
+                String cStr = BuildUpdateCommand(user);      // helper method to build the insert string
+
+                cmd = CreateCommand(cStr, con);             // create the command
+
+                try
+                {
+                    int rowEffected = cmd.ExecuteNonQuery(); // execute the command
+                    return rowEffected;
+                }
+                catch (Exception ex)
+                {
+                    // write to log
+                    throw (ex);
+                }
+
+                finally
+                {
+                    if (con != null)
+                    {
+                        // close the db connection
+                        con.Close();
+                    }
+                }
+            }
+        }
+        private String BuildUpdateCommand(User user)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat(" SET [FirstName]='{0}', [LastName]='{1}', [Email]='{2}', [Password]='{3}', [PhoneNum]={4}, [Gender]='{5}', [YearOfBirth]= {6}, [Genre]='{7}', [Address]='{8}'", user.FirstName, user.LastName, user.Email, user.Password, user.PhoneNum, user.Gender, user.YearOfBirth, user.Genre, user.Address);
+            String prefix = "UPDATE User_2021" + " ";
+            String end = "WHERE id= " + user.Id;
+            command = prefix + sb.ToString() + end;
+            return command;
+        }
         /// //////////////////////////////////////////////////////
         public int Delete(int id)
         {

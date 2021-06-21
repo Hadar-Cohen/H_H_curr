@@ -26,6 +26,12 @@ namespace Ex2.Controllers
             }
         }
 
+        public User Get(int id)
+        {
+            User us = new User();
+            return us.GetById(id);
+        }
+
         public List<User> Get()
         {
             User us = new User();
@@ -38,8 +44,18 @@ namespace Ex2.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        public HttpResponseMessage Put(User user)
         {
+            int num = user.UpdateUser();
+            if (num == 1)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, "User Updated");
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "user not found");
+            }
+
         }
 
         // DELETE api/<controller>/5
