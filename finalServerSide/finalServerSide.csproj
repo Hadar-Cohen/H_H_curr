@@ -186,6 +186,7 @@
     <Content Include="images\3stars.png" />
     <Content Include="images\4stars.png" />
     <Content Include="images\5stars.png" />
+    <Content Include="images\search.jpeg" />
     <Content Include="packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll" />
     <Content Include="packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.pdb" />
     <Content Include="packages\bootstrap.3.4.1\contentFiles\Content\bootstrap-theme.css" />
@@ -326,6 +327,7 @@
     <Content Include="Pages\insert_signup.html" />
     <Content Include="Pages\login.html" />
     <Content Include="Pages\login_style_sheet.css" />
+    <Content Include="Pages\modalView.css" />
     <Content Include="Pages\myStyle.css" />
     <Content Include="Pages\StyleSheetModalactor.css" />
     <Content Include="Pages\view.html" />

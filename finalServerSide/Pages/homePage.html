@@ -44,6 +44,7 @@
             getTopRated();  // Get similars Tv show
             getMostViewed(); 
             getMostViewedEpisodes();
+            getGanres()
          
         });
  ////////////////////////////////////top rated from the movie DB api - //////////////////////////////////////////////
@@ -98,7 +99,7 @@
         }
 
 ///////////////////////////////////////most view according awere DB ///////////////////////////////////////////////////
-////////////////////////////////////// Seriess ///////////////////////////////////////////////////
+        ////////////////////////////////////// Seriess ///////////////////////////////////////////////////
 
         function getMostViewed() {
             //mostViewedArr = "<div class='container'>";
@@ -216,7 +217,74 @@
                    <img class='starsPopularity' src= '../images/` + stars + `stars.png'/></div>`
             return str;
         }
+//////////////////////////////////////////search according ganre - /////////////////////////////////////////////////////////
+        function getGanres() {
+            ganresList = "<div> <select id='ganre' onchange=showSeriesAccoGanre(this)>";
+            ganresList += "<option value=" + null + "> select </option>";
 
+            let apiCall = url + "3/genre/tv/list?" + api_key;
+            ajaxCall("GET", apiCall, "", getSuccessGanres, errorGanres);
+        }
+
+        r = 0; //index in result array that contain all the tv shows in the TMDB services
+         ganresArr = [];//local arrey to render and play onclick function 
+        function getSuccessGanres(ganre) {
+            ganresArr = ganre.genres;
+            ganresArr.forEach(gan => {
+                ganresList += drawganres(gan);
+                r++;
+            });
+            ganresList += "</select></div>";
+            $("#genreSearch").html(ganresList);
+            r = 0;
+
+        }
+        function errorGanres(err) {
+            console.log(err);
+        }
+        function drawganres(ganre) {
+            console.log(ganre);
+            str = "";
+            str += "<option value=" + ganre.id + ">" + ganre.name + "</option>";
+           // str = `<button id=` + ganre.id +` class="button button5">`+ganre.name+`</button>`
+            return str;
+        }
+        ///////////////
+        //function showSeriesAccoGanre(ganer)
+        //{
+
+        //}
+
+        function showAbout(tvShow) {
+            console.log(tvShow);
+            storeToLS(tvShow);
+            window.location.replace("insert_signup.html");
+           // location.reload();
+        }
+        //Store to Local Storage the tvShow that was clicked
+        function storeToLS(tvShow) {
+            seriesObj = {
+                Id: tvShow.id,
+                First_air_date: tvShow.first_air_date,
+                Name: tvShow.name,
+                Origin_country: tvShow.origin_country[0],
+                Original_language: tvShow.original_language,
+                Overview: tvShow.overview,
+                Popularity: tvShow.popularity,
+                Poster_path: imagePath + tvShow.poster_path
+            }
+            extras = {
+
+                Backdrop_path: imagePath + tvShow.backdrop_path,
+                Genre_ids: tvShow.genre_ids
+
+            }
+            totalSeries = {
+                seriesObj,
+                extras
+            }
+            localStorage.setItem("series", JSON.stringify(totalSeries));
+        }
     </script>
 </head>
 <body>
@@ -250,6 +318,13 @@
     <div id="mostViewed"></div>
     <div class='title'><a>The most watched episodes on our website</a></div>
     <div id="mostViewedEpisodes"></div>
+    <div class='title'><a>Search by genre</a></div>
+    <div id="genreSearch">
+        <button class="button button5">Black</button>
+    </div>
+       
+
     
+
 </body>
 </html>
