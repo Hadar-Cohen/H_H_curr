@@ -42,9 +42,10 @@
             api_key = "api_key=" + key;
 
             getTopRated();  // Get similars Tv show
+            getMostViewed(); 
          
         });
-
+ ////////////////////////////////////top rated from the movie DB api - //////////////////////////////////////////////
         function getTopRated() {
             topRatedArr = "<div class='container'>";
             topRatedArr += "<div class='row'>";
@@ -55,7 +56,7 @@
         }
 
         r = 0; //index in result array that contain all the tv shows in the TMDB services
-        resultArr = null;
+        resultArr = null;//local arrey to render and play onclick function 
         function getSuccesstopRated(topRated) {
             console.log(topRated);
             resultArr = topRated.results;
@@ -65,6 +66,7 @@
 
             let stars = 5;
             let popularity = resultArr[r].popularity;
+            ///////////////////////Star rating according to the series api//////////////////////
             switch (true) {
                 case (popularity < 40):
                     stars = 1
@@ -88,10 +90,65 @@
         }
         function errortopRated(err) {
             console.log(err);
-            resultArr += "</div></div>";
+            topRatedArr += "</div></div>";//close the div
             $("#topRated").html(topRatedArr);
             r = 0;
+            resultArr = null;
         }
+
+///////////////////////////////////////most view according awere DB ///////////////////////////////////////////////////
+        function getMostViewed() {
+            mostViewedArr = "<div class='container'>";
+            mostViewedArr += "<div class='row'>";
+            $("#mostViewed").html(mostViewedArr);
+            let api = "../api/Seriess";
+            ajaxCall("GET", api, "", getSuccessMostViewed, errorMostViewed);
+        }
+
+        s = 0; //index in result array that contain all the tv shows in the TMDB services
+       // resultArr = null;//local arrey to render and play onclick function 
+        function getSuccessMostViewed(topV) {
+            console.log(topV);
+           /* resultArr = topV.results;*/
+            mostViewedArr += "<div class='recommand-card'>";
+            mostViewedArr += "<img src='" + topV[s].Poster_path + "'>";
+            mostViewedArr += "<h4><b>" + topV[s].Name + "</b></h4>";
+
+            let stars = 5;
+            let popularity = topV.popularity;
+            ///////////////////////Star rating according to the series api//////////////////////
+            switch (true) {
+                case (popularity < 40):
+                    stars = 1
+                    break;
+                case (popularity < 60):
+                    stars = 2
+                    break;
+                case (popularity < 200):
+                    stars = 3
+                    break;
+                case (popularity < 400):
+                    stars = 4
+                    break;
+            }
+
+            mostViewedArr += "<img class='starsPopularity' src= '../images/" + stars + "stars.png'/></div>";
+            $("#mostViewed").html(mostViewedArr);
+            s++;
+            if (s < 8) {
+                let api = "../api/Seriess";
+                ajaxCall("GET", api, "", getSuccessMostViewed, errorMostViewed);
+            }
+            else
+                errorMostViewed("we render 20 first seriess"); 
+        }
+        function errorMostViewed(err) {
+            console.log(err);
+            mostViewedArr += "</div></div>";//close the div
+            $("#mostViewed").html(mostViewedArr);
+            s = 0;
+        }
+
     </script>
 </head>
 <body>
@@ -102,7 +159,8 @@
             </div>
             <ul class="nav navbar-nav justify-content-between">
                 <li><div id="userName"></div></li>
-                <li><a class="toblack" href="insert_signup.html"> Home</a></li>
+                <li><a class="toblack" href="homePage.html"> Home</a></li>
+                <li><a class="toblack" href="insert_signup.html">search</a></li>
                 <li><a class="toblack" id="view" href="view.html">View</a></li>
                 <li><a class="toblack" id="admin" href="admin.html">Admin</a></li>
 
@@ -117,8 +175,11 @@
     </nav>
 
     <span id="webName">H & H </span>
-    <div class='titlesHomePage'><a>TOP RATED</a></div>
-    <div id="topRated"></div> 
+    <div class='title'><a href="insert_signup.html" >Search...</a></div>
+    <div class='title'><a>TOP RATED</a></div>
+    <div id="topRated"></div>
+    <div class='title'><a>Most viewed on our website</a></div>
+    <div id="mostViewed"></div>
 
 </body>
 </html>

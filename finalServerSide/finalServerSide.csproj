@@ -321,6 +321,8 @@
     <Content Include="Pages\chatStyle.css" />
     <Content Include="Pages\chatTry.html" />
     <Content Include="Pages\editUser.html" />
+    <Content Include="Pages\homePage.css" />
+    <Content Include="Pages\homePage.html" />
     <Content Include="Pages\insert_signup.html" />
     <Content Include="Pages\login.html" />
     <Content Include="Pages\login_style_sheet.css" />

@@ -213,7 +213,7 @@ namespace Ex2.Models.DAL
             {
                 con = connect("DBConnectionString"); // create the connection
                 List<Series> seriesList = new List<Series>();
-                String selectSTR = "SELECT * FROM Series_2021";//WHERE isAdmin=false
+                String selectSTR = "SELECT * FROM Series_2021 order by preferencesCount DESC";//WHERE isAdmin=false
                 cmd = new SqlCommand(selectSTR, con);
 
                 // get a reader
