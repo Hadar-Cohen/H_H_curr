@@ -217,9 +217,11 @@
                    <img class='starsPopularity' src= '../images/` + stars + `stars.png'/></div>`
             return str;
         }
-//////////////////////////////////////////search according ganre - /////////////////////////////////////////////////////////
+
+        
+        //////////////////////////////////////////search according ganre - /////////////////////////////////////////////////////////
         function getGanres() {
-            ganresList = "<div> <select id='ganre' onchange=showSeriesAccoGanre(this)>";
+            ganresList = "<div> <select id='ganre' onchange=showSeriesAccoGanre(this.value)>";
             ganresList += "<option value=" + null + "> select </option>";
 
             let apiCall = url + "3/genre/tv/list?" + api_key;
@@ -227,7 +229,7 @@
         }
 
         r = 0; //index in result array that contain all the tv shows in the TMDB services
-         ganresArr = [];//local arrey to render and play onclick function 
+        ganresArr = [];//local arrey to render and play onclick function 
         function getSuccessGanres(ganre) {
             ganresArr = ganre.genres;
             ganresArr.forEach(gan => {
@@ -246,15 +248,57 @@
             console.log(ganre);
             str = "";
             str += "<option value=" + ganre.id + ">" + ganre.name + "</option>";
-           // str = `<button id=` + ganre.id +` class="button button5">`+ganre.name+`</button>`
+            // str = `<button id=` + ganre.id +` class="button button5">`+ganre.name+`</button>`
             return str;
         }
-        ///////////////
-        //function showSeriesAccoGanre(ganer)
-        //{
+        /////////////
+        function showSeriesAccoGanre(ganerId)
+        {
+            seriesAccoGenreList = "<div class='container'>";
+            seriesAccoGenreList += "<div class='row'>";
 
-        //}
+            let apiCall = url + "3/discover/tv?" + api_key + "&sort_by=popularity.desc&with_genres=" + ganerId;
+            ajaxCall("GET", apiCall, "", getSuccessTVShowGanres, errorGanres);
+        }
+        r = 0; //index in result array that contain all the tv shows in the TMDB services
+        seriesAccoGenreArr = [];//local arrey to render and play onclick function 
+         function getSuccessTVShowGanres(seriess) {
+             seriesAccoGenreArr = seriess.results;
+             seriesAccoGenreArr.forEach(TVShow => {
+                 seriesAccoGenreList += drawAccoGenre(TVShow);
+                 r++;
+             });
+             seriesAccoGenreList += "</div></div>";
+             $("#seriesAccoGenre").html(seriesAccoGenreList);
+             r = 0;
 
+        }
+        function drawAccoGenre(TVShow) {
+            console.log(TVShow);
+            let stars = 5;
+            let popularity = TVShow.popularity;
+            switch (true) {
+                case (popularity < 40):
+                    stars = 1
+                    break;
+                case (popularity < 60):
+                    stars = 2
+                    break;
+                case (popularity < 200):
+                    stars = 3
+                    break;
+                case (popularity < 400):
+                    stars = 4
+                    break;
+            }
+            str = "";
+            str = `<div class='recommand-card' onclick = 'showAbout(seriesAccoGenreArr[` + r + `])'>
+                   <img src='` + imagePath + TVShow.poster_path + `'>
+                   <h4><b>` + TVShow.name + `</b></h4>
+                   <img class='starsPopularity' src= '../images/` + stars + `stars.png'/></div>`
+            return str;
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function showAbout(tvShow) {
             console.log(tvShow);
             storeToLS(tvShow);
@@ -262,7 +306,7 @@
             // location.reload();
         }
         //Store to Local Storage the tvShow that was clicked
-        function storeToLs(tvShow) {
+        function storeToLS(tvShow) {
             seriesObj = {
                 Id: tvShow.id,
                 First_air_date: tvShow.first_air_date,
@@ -286,14 +330,14 @@
             localStorage.setItem("series", JSON.stringify(totalSeries));
         }
 
-///////////in our prij we need Upper letters - property//////////
+        ///////////in our prij we need Upper letters - property//////////
         function showAboutFronOurWeb(tvShow) {
             console.log(tvShow);
             storeToLsFromSeriesDB(tvShow);
             window.location.replace("insert_signup.html");
             // location.reload();
         }
-///////////in our prij we need Upper letters - property//////////
+        ///////////in our prij we need Upper letters - property//////////
         function storeToLsFromSeriesDB(tvShow) {
             seriesObj = {
                 Id: tvShow.Id,
@@ -317,6 +361,7 @@
             }
             localStorage.setItem("series", JSON.stringify(totalSeries));
         }
+
     </script>
 </head>
 <body>
@@ -351,12 +396,12 @@
     <div class='title'><a>The most watched episodes on our website</a></div>
     <div id="mostViewedEpisodes"></div>
     <div class='title'><a>Search by genre</a></div>
-    <div id="genreSearch">
-        <button class="button button5">Black</button>
-    </div>
-       
+    <div id="genreSearch"> </div>
+    <div id="seriesAccoGenre"></div>
 
-    
+
+
+
 
 </body>
 </html>
