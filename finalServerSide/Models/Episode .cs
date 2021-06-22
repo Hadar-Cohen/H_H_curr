@@ -52,10 +52,10 @@ namespace Ex2.Models
             return ds.Insert(this);
         }
 
-        public List<Episode> Get(string seriesName)
+        public List<Episode> Get(string seriesName, int userId)
         {
             EpisodeDataServices d = new EpisodeDataServices();
-            List<Episode> episodeList = d.GetEpisodes(seriesName);
+            List<Episode> episodeList = d.GetEpisodes(seriesName, userId);
             return episodeList;
         }
         public List<Episode> Get()

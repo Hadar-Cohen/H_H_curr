@@ -4,9 +4,6 @@
 
     url = "https://api.themoviedb.org/";
     imagePath = "https://image.tmdb.org/t/p/w500/";
-    // 64467
-    // 1416
-    //https://api.themoviedb.org/3/tv/1416/season/0/episode/64467?api_key=1c107f2bd2f3fc2aee24aa4f2f8d8647&language=en-US
 
     if (localStorage.series != null) {
         series = JSON.parse(localStorage["series"]);
@@ -63,7 +60,7 @@ function showTVData() {
 
 function getCredists() {
     actorsList = "<div class='container'>";
-    actorsList += "<div class='row'>";
+    actorsList += "<div class='actors-row'>";
 
     let apiCall = url + method + tvId + "/credits?" + api_key;
     ajaxCall("GET", apiCall, "", getCastSuccessCB, getCastErrorCB);
@@ -101,13 +98,11 @@ function drawActor(actor) {
 }
 
 function aboutTheActor(actorId) {
-    console.log(actorId);
     let apiCall = url + "3/person/" + actorId + "?" + api_key;
     ajaxCall("GET", apiCall, "", getActorSuccessCB, getActorErrorCB);
 }
 
 function getActorSuccessCB(actor) {
-    console.log(actor);
     openModal();
     let str = "";
     str += "<div class='ActorTitle'>" + actor.name + "</div>"
@@ -149,16 +144,12 @@ function openModal() {
 }
 
 // When the user clicks anywhere outside of the modal, close it
-function getActorErrorCB(actor) {
-    console.log(actor);
+function getActorErrorCB(err) {
+    console.log(err);
 }
 
 //Reocommanded Series
 function getRecommendations() {
-    recList = "<div class='container'>";
-    recList += "<div class='row'>";
-    /*$("#recommendations").html(recList);*/
-
     let apiCall = url + method + tvId + "/recommendations?" + api_key;
     ajaxCall("GET", apiCall, "", getSuccessRecommendationsCB, errorRecommendationsCB);
 }
@@ -167,7 +158,8 @@ function getRecommendations() {
 r = 0; //index in result array that contain all the tv shows in the TMDB services
 recArr = [];
 function getSuccessRecommendationsCB(recommendations) {
-
+    let recList = "<div class='container'>";
+    recList += "<div class='row'>";
     recArr = recommendations.results;
     recArr.forEach(recommand => {
         recList += drawRecommand(recommand);
@@ -210,10 +202,6 @@ function drawRecommand(rec) {
 }
 
 function getSimilars() {
-    similarList = "<div class='container'>";
-    similarList += "<div class='row'>";
-    //$("#similars").html(similarList);
-
     let apiCall = url + method + tvId + "/similar?" + api_key;
     ajaxCall("GET", apiCall, "", getSuccessSimilarsCB, errorSimilarsCB);
 }
@@ -221,44 +209,19 @@ function getSimilars() {
 //Get a list of similar TV shows. These items are assembled by looking at keywords and genres.
 similarArr = null;
 function getSuccessSimilarsCB(similars) {
-    console.log(similars);
     similarArr = similars.results;
-
+    let similarList = "<div class='container'>";
+    similarList += "<div class='row'>";
     similarArr.forEach(similarShow => {
         similarList += drawRecommand(similarShow);
         r++;
     });
     similarList += "</div></div>";
     $("#similars").html(similarList);
-
-    //let stars = 5;
-    //let popularity = similarArr[r].popularity;
-    //switch (true) {
-    //    case (popularity < 40):
-    //        stars = 1
-    //        break;
-    //    case (popularity < 60):
-    //        stars = 2
-    //        break;
-    //    case (popularity < 200):
-    //        stars = 3
-    //        break;
-    //    case (popularity < 400):
-    //        stars = 4
-    //        break;
-    //}
-
-    //similarList += "<img class='starsPopularity' src= '../images/" + stars + "stars.png'/></div>";
-    //$("#similars").html(similarList);
-    //r++;
-    //let apiCall = url + method + tvId + "/similar?" + api_key;
-    //ajaxCall("GET", apiCall, "", getSuccessSimilarsCB, errorSimilarsCB);
-
+    r = 0;
 }
 function errorSimilarsCB(err) {
     alert("ERROR");
-    //similarList += "</div></div>";
-    //$("#similars").html(similarList);
 }
 
 //Show the about page of this tvshow was clicked
@@ -294,17 +257,15 @@ function storeToLS(tvShow) {
 
 ////////////////////////////////////////////////Reviews////////////////////////////////////////////////
 function getReviews() {
-    reviewsList = "<div class='reviews'>";
-    $("#reviews").html(reviewsList);
-
-    reviewsList = `<div class="carousel">`;
-
     let apiCall = url + method + tvId + "/reviews?" + api_key;
     ajaxCall("GET", apiCall, "", getSuccessReviewsCB, errorReviewsCB);
 }
 
 function getSuccessReviewsCB(reviewsArr) {
     console.log(reviewsArr.results)
+
+    let reviewsList = "<div class='reviews'>";
+    reviewsList = `<div class="carousel">`;
     if (reviewsArr.results != undefined) {
         var reviews = reviewsArr.results;
 
@@ -325,9 +286,6 @@ function getSuccessReviewsCB(reviewsArr) {
     }
     else
         alert("NO REVIEWS");
-
-    //let apiCall = url + method + tvId + "/reviews?" + api_key;
-    // ajaxCall("GET", apiCall, "", getSuccessReviewsCB, errorReviewsCB);
 }
 
 function drawReview(review) {

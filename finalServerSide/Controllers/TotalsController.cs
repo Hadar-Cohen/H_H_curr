@@ -17,6 +17,13 @@ namespace Ex2.Controllers
             return total.GetSeries(userId);
         }
 
+        public List<Episode> Get(string seriesName, int userId)
+        {
+            Episode e = new Episode();
+            List<Episode> Elist = e.Get(seriesName, userId);
+            return Elist;
+        }
+
         // POST api/<controller>
         public int Post([FromBody]Total obj)
         {

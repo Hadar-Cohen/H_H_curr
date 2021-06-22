@@ -126,19 +126,21 @@ body {
     justify-content: center;
 }
 
-#seasonsList, #episodesView {
-    display: table;
-    justify-content: center;
-    margin: 0 auto;
-}
 /*.center {
     margin-left: auto;
     margin-right: auto;
 }*/
-.episodes-center, #episodesView, #seasonsList {
+.episodes-center, #episodesView {
     display: grid;
     width: 100%;
     grid-template-columns: repeat( auto-fit, minmax(250px, auto) );
+    justify-content: center;
+}
+
+.seasons-center { 
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat( auto-fit, minmax(100px, auto) );
     justify-content: center;
 }
 
@@ -280,10 +282,7 @@ td {
     position:relative;
 }
 
-#episodeTitle{
-    font-size:20px;
-    margin:5px auto;
-}
+
 #navbar {
     background-color: #eac8af;
     position: sticky;
@@ -471,17 +470,20 @@ p{
     font-family:Tahoma;
     font-size:16px;
 }
-#episodeTitle {
+.episodeTitle {
+    font-size: 20px;
+    margin: 5px auto;
     -webkit-line-clamp: 1; /* number of lines to show */
     -webkit-box-orient: vertical;
 }
 
-#episodeBlock {
+.episodeBlock {
     font-family: Tahoma;
     text-align: center;
+    font-size:17px;
 }
 
-#episodeBlock > #episodeOverView {
+.episodeBlock > #episodeOverView {
     text-align: left;
 }
 

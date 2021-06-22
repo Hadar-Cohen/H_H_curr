@@ -8,16 +8,6 @@
             crossorigin="anonymous">
     </script>
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <!--<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>-->
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <!--<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>-->
-
-    <!--**** Remember to add the database script ***-->
-    <!--<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-database.js"></script>-->
-
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
@@ -32,11 +22,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <link href="chatStyle.css" rel="stylesheet" />
-
+    
 
     <script>
-
-        function init() {
+        function initChat() {
             msgArr = [];
             var seriesName;
             if (localStorage.series != null) {
@@ -46,19 +35,35 @@
             else
                 seriesName = "lucifer";
             if (localStorage.user != null) {
-                let tmp = JSON.parse(localStorage["user"]);
+                tmp = JSON.parse(localStorage["user"]);
                 userName = tmp.FirstName + " " + tmp.LastName;
+                id = tmp.Id;
+                user = {
+                    id: id,
+                    name: userName
+                }
             }
+            
+            
+            //else
+            //    classStyle = "";
             //pulling the name of tvshow from ls and insert there too
             ref = firebase.database().ref(seriesName);
             // listen to incoming messages
             listenToNewMessages();
             // listen to removing messages
             //listenToRemove();
-            ph = document.getElementById("ph");
+            /*ph = document.getElementById("ph");*/
             chat = document.getElementById("chat");
+            //setTimeout(scrollChatDown, 1000);
             date = calcDay();
         }
+
+        function scrollChatDown() {
+            var element = document.getElementById("chat-content");
+            element.scrollTop = element.scrollHeight;
+        }
+
         function calcDay() {
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
@@ -71,13 +76,18 @@
             // child_added will be evoked for every child that was added
             // on the first entry, it will bring all the childs
             ref.on("child_added", snapshot => {
-                
+
                 msg = {
-                    name: snapshot.val().name,
+                    user: snapshot.val().user,
                     content: snapshot.val().msg,
                     date: snapshot.val().date
                 }
                 msgArr.push(msg)
+                classStyle = "", imgAvatar = "";
+                if (user.id == msg.user.id)
+                    classStyle = ` media-chat-reverse`;
+                else
+                    imgAvatar = `<img class="avatar" src="https://image.ibb.co/jw55Ex/def_face.jpg">`
                 printMessage(msg);
             })
         }
@@ -93,65 +103,76 @@
             for (let index = 0; index < msgArr.length; index++) {
                 const msg = msgArr[index];
                 //ph += "name: " + msg.name + ", content: " + msg.content + "<br/>";
-                str += printToChat(msg);
+                //classStyle = "", imgAvatar="";
+                //if (user.id == msg.user.id)
+                //    classStyle = ` media-chat-reverse`;
+                //else
+                //    imgAvatar = `<img class="avatar" src="https://image.ibb.co/jw55Ex/def_face.jpg">`
+                //str += printToChat(msg);
             }
             chat.innerHTML += str;
         }
 
         function addMSG() { //add msg to the array of messages
             let content = document.getElementById("msgTB").value;
-            let name = userName;//document.getElementById("nameTB").value;
+            //let name = userName;//document.getElementById("nameTB").value;
 
-            if (name == "") {
-                alert("must enter a name");
+            if (user.name == null) {
+                alert("must login in order to chat");
                 return;
             }
-            ref.push().set({ "msg": content, "name": name, "date": date });
+
+            ref.push().set({ "msg": content, "user": user, "date": date });
+            setTimeout(scrollChatDown, 1);
+            document.getElementById("msgTB").value = "";
         }
 
         function printToChat(msg) {/*class="media-body"*/
-            return `<div class="media media-meta-day">` + msg.date +`</div>
-                    <div class="media media-chat media-chat-reverse">
-                        <div class="media-body">
-                            <p>`+ msg.name +`</p> 
-                            <p> ` + msg.content + `</p>
-                    </div>
-                </div>`;
+            //                                <p>`+ msg.user.name + `</p>
+            return `<div class="media media-meta-day">` + msg.date + `</div>
+                        <div class="media media-chat `+ classStyle + `"> 
+                            <div class="media-body">` + imgAvatar + `
+                                <p> ` + msg.content + `</p>
+                        </div>
+                    </div>`;
         }
-
     </script>
 
 </head>
-<body onload="init()">
-    <div class="page-content page-container" id="page-content">
-        <div class="padding">
-            <div class="row container d-flex justify-content-center">
-                <div class="col-md-6">
-                    <div class="chatCard chatCard-bordered">
-                        <div class="chatCard-header">
-                            <h4 class="chatCard-title"><strong>Chat</strong></h4>
-                        </div>
-                        <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
-                            <div id="chat"></div>
-
-                            <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
-                                <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+<body onload="initChat()">
+    <div id="Chat" class="tabcontent">
+        <div class='title'><a>Chat Furum</a></div>
+        <!-- Chat: -->
+        <div class="page-content page-container" id="page-content">
+            <div class="padding">
+                <div class="row container d-flex justify-content-center">
+                    <div class="col-md-6">
+                        <div class="chatCard chatCard-bordered">
+                            <div class="chatCard-header">
+                                <h4 class="chatCard-title"><strong>Chat</strong></h4>
                             </div>
-                            <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
-                                <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
-                            </div>
-                            <div class="publisher bt-1 border-light">
-                                <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
-                                <input id="msgTB" class="publisher-input" type="text" placeholder="Write something"><span class="publisher-btn file-group">
-                                    <button onclick="addMSG()">Add Message</button>
-                                </span>
+                            <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important; display: flex; flex-direction: column; justify-content: flex-end">
+                                <div id="chat"></div>
 
+                                <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                                    <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                                </div>
+                                <div id="gotcha" class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
+                                    <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
+                                </div>
+                                <div class="publisher bt-1 border-light">
+                                    <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+                                    <input id="msgTB" class="publisher-input" type="text" placeholder="Write something"><span class="publisher-btn file-group">
+                                        <button onclick="addMSG()">SEND</button>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!--  -->
     </div>
 </body>
 </html>

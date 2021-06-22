@@ -18,8 +18,8 @@ body {
 
 .right {
     position: absolute;
-    left: 500px;
-    top: 180px;
+    left: 30%;
+    top: 10%;
     right: 45px;
 }
 
@@ -69,6 +69,15 @@ body {
     flex-wrap: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
+}
+
+.actors-row {
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
     justify-content: center;
 }
 
@@ -85,7 +94,7 @@ body {
     color: white;
     border-radius: 25px;
     margin: 2px;
-    text-align:center;
+    text-align: center;
 }
 .actor-card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -355,4 +364,12 @@ body {
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+}
+
+.tab > button : focus {
+    background-color: lightcoral;
+}
+
+:focus {
+    background: pink;
 }
