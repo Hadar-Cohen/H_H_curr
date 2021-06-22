@@ -152,7 +152,7 @@
                     break;
             }
             str = "";
-            str = `<div class='recommand-card' onclick = 'showAbout(mostViewedArr[` + r + `])'>
+            str = `<div class='recommand-card' onclick = 'showAboutFronOurWeb(mostViewedArr[` + r + `])'>
                    <img src='`+ TVShow.Poster_path + `'>
                    <h4><b>` + TVShow.Name + `</b></h4>
                    <img class='starsPopularity' src= '../images/` + stars + `stars.png'/></div>`
@@ -209,8 +209,8 @@
                     stars = 4
                     break;
             }
-            str = "";
-            str = `<div class='recommand-card' onclick = 'showAbout(mostViewedEpisodesArr[` + r + `])'>
+            str = "";// onclick = 'showAboutFronOurWeb(mostViewedEpisodesArr[` + r + `])
+            str = `<div class='recommand-card'>
                    <img src='`+ TVShow.ImageURL + `'>
                    <h5><b>` + TVShow.SeriesName + "</b><br>Season" + TVShow.SeasonNum + `</h5>
                    <h5>` + TVShow.EpisodeName + `</h5>
@@ -259,19 +259,51 @@
             console.log(tvShow);
             storeToLS(tvShow);
             window.location.replace("insert_signup.html");
-           // location.reload();
+            // location.reload();
         }
         //Store to Local Storage the tvShow that was clicked
-        function storeToLS(tvShow) {
+        function storeToLs(tvShow) {
             seriesObj = {
                 Id: tvShow.id,
                 First_air_date: tvShow.first_air_date,
                 Name: tvShow.name,
-                Origin_country: tvShow.origin_country[0],
+                Origin_country: tvShow.origin_country,
                 Original_language: tvShow.original_language,
                 Overview: tvShow.overview,
                 Popularity: tvShow.popularity,
                 Poster_path: imagePath + tvShow.poster_path
+            }
+            extras = {
+
+                Backdrop_path: imagePath + tvShow.backdrop_path,
+                Genre_ids: tvShow.genre_ids
+
+            }
+            totalSeries = {
+                seriesObj,
+                extras
+            }
+            localStorage.setItem("series", JSON.stringify(totalSeries));
+        }
+
+///////////in our prij we need Upper letters - property//////////
+        function showAboutFronOurWeb(tvShow) {
+            console.log(tvShow);
+            storeToLsFromSeriesDB(tvShow);
+            window.location.replace("insert_signup.html");
+            // location.reload();
+        }
+///////////in our prij we need Upper letters - property//////////
+        function storeToLsFromSeriesDB(tvShow) {
+            seriesObj = {
+                Id: tvShow.Id,
+                First_air_date: tvShow.First_air_date,
+                Name: tvShow.Name,
+                Origin_country: tvShow.Origin_country,
+                Original_language: tvShow.Original_language,
+                Overview: tvShow.Overview,
+                Popularity: tvShow.Popularity,
+                Poster_path: tvShow.Poster_path
             }
             extras = {
 
