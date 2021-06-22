@@ -31,15 +31,17 @@
             navBarVisability();
             modal();
 
-            $("#phView").html("");
-            str = "<select id='series' onchange=showEpisodes(this)>";
-            str += "<option>select</option>";
+            //$("#phView").html("");
+            //str = "<select id='series' onchange=showEpisodes(this)>";
+            //str += "<option>select</option>";
             userId = user.Id;
             userName = user.FirstName + " " + user.LastName;
             userTmp = {
                 id: userId,
                 name: userName
             }
+            series = document.getElementById('series');
+            //selectedText = series.options[series.selectedIndex].innerHTML;
             let api = "../api/Totals?UserId=" + userId;
             ajaxCall("GET", api, "", getSeriesSuccessCB, getSeriesErrorCB);
         });
@@ -78,7 +80,9 @@
         </div>
     </div>
     <div id="title">My Series</div>
-    <div id="phView"></div>
+    <div id="phView">
+        <select id="series" onchange='showEpisodes(this)'></select>
+    </div>
     <table id="episodesView"></table>
 
 

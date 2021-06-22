@@ -1,20 +1,19 @@
 ﻿function getSeriesSuccessCB(seriesNames) {
+    str = "";
     for (const s of seriesNames) {
         str += "<option value=" + s + ">" + s + "</option>";
     }
-    str += "</select>";
-    $("#phView").html(str);
+    $("#series").html(str);
 
-
-    //alert(idtvHadar)
 }
 function getSeriesErrorCB(err) {
-    alert("Error -cant get the Series names")
+    alert("Error -cant get the Series names");
 }
 
 function showEpisodes(series) {
-    initChat();
     var selectedText = series.options[series.selectedIndex].innerHTML;
+    initChat(selectedText);
+   
     let api = "../api/Totals?seriesName=" + selectedText + "&userId=" + userId;
     ajaxCall("GET", api, "", getEpisodesSuccessCB, Error);
 }
