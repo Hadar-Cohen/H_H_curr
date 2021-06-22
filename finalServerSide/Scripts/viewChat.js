@@ -28,13 +28,11 @@ function modal() {
     }
 }
 
-function initChat() {
+function initChat(selectedSeries) {
     msgArr = [];
     //catch the series name
-    /*var series = JSON.parse(localStorage["series"]);*/
-    var seriesName = $("#series").val();//series.seriesObj.Name;
-
-    ref = firebase.database().ref(seriesName);
+    console.log(selectedSeries);
+    ref = firebase.database().ref(selectedSeries);
     // listen to incoming messages
     listenToNewMessages();
     chat = document.getElementById("chat");
@@ -66,7 +64,7 @@ function listenToNewMessages() {
         }
         msgArr.push(msg)
         classStyle = "", imgAvatar = "";
-        if (userId == msg.user.id)//////////////////////
+        if (userId == msg.user.id)
             classStyle = ` media-chat-reverse`;
         else
             imgAvatar = `<img class="avatar" src="https://image.ibb.co/jw55Ex/def_face.jpg">`
@@ -82,20 +80,12 @@ function printMessages(msgArr) {
     var str = "";
     for (let index = 0; index < msgArr.length; index++) {
         const msg = msgArr[index];
-        //ph += "name: " + msg.name + ", content: " + msg.content + "<br/>";
-        //classStyle = "", imgAvatar="";
-        //if (user.id == msg.user.id)
-        //    classStyle = ` media-chat-reverse`;
-        //else
-        //    imgAvatar = `<img class="avatar" src="https://image.ibb.co/jw55Ex/def_face.jpg">`
-        //str += printToChat(msg);
     }
     chat.innerHTML += str;
 }
 
 function addMSG() { //add msg to the array of messages
     let content = document.getElementById("msgTB").value;
-    //let name = userName;//document.getElementById("nameTB").value;
 
     ref.push().set({ "msg": content, "user": userTmp, "date": date });
     setTimeout(scrollChatDown, 1);
